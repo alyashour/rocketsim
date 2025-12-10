@@ -1,1 +1,9 @@
+# Build
 build/
+
+# Caches (clang and others)
+**/.cache/
+
+# IDEs
+.vscode/
+.idea/
