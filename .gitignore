@@ -1,1 +1,5 @@
+# Build
 build/
+
+# Caches (clang and others)
+**/.cache/
