@@ -1,32 +1,55 @@
 cmake_minimum_required(VERSION 3.20)
 project(RocketSim C)
 
+# Variables
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -Wall -Wextra -Wpedantic -Wshadow")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(GLAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad")
+set(GLAD_SOURCE "${GLAD_DIR}/src/glad.c")
+set(GLAD_INCLUDE "${GLAD_DIR}/include")
 
-find_package(SDL2 REQUIRED)
+# GLAD
+# - warning check
+if(NOT EXISTS "${GLAD_SOURCE}")
+    message(FATAL_ERROR
+        "\n---- GLAD Missing! ----\n"
+        "Could not find glad.c at: ${GLAD_SOURCE}\n"
+        "Please generate it at https://glad.dav1d.de/ and place the "
+        "'src' and 'include' folders into 'vendor/glad/'.\n"
+        "---------------------------------------------\n"
+    )
+endif()
+add_library(glad STATIC "${GLAD_SOURCE}")
+target_include_directories(glad PUBLIC "${GLAD_INCLUDE}")
+# -> turn off compile warnings for glad (external)
+target_compile_options(glad PRIVATE -w) # does not work for msvc
 
+# GLFW
+option(GLFW_BUILD_DOCS OFF)
+option(GLFW_BUILD_EXAMPLES OFF)
+option(GLFW_BUILD_TESTS OFF)
+option(GLFW_INSTALL OFF)
+find_package(glfw3 REQUIRED)
+
+# Create 4 executables: controller, simulator, visualizer, and rocketsim
+# - Controller
 add_executable(controller
     src/controller/main.c
 )
+
+# - Simulator
 add_executable(simulator
     src/simulator/main.c
 )
 
+# - Visualizer
 add_executable(visualizer
     src/visualizer/main.c
 )
-target_include_directories(visualizer PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(visualizer PRIVATE ${SDL2_LIBRARIES})
+target_link_libraries(visualizer PRIVATE glfw glad)
 
 # RocketSim
 add_executable(rocketsim
     src/launcher/main.c
 )
-target_include_directories(rocketsim PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(rocketsim PRIVATE ${SDL2_LIBRARIES})
-target_compile_options(rocketsim PRIVATE $<$<CONFIG:Debug>:-fsanitize=address -fno-omit-frame-pointer>)
-target_link_options(rocketsim PRIVATE $<$<CONFIG:Debug>:-fsanitize=address>)
-
-

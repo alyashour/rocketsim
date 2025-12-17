@@ -7,3 +7,9 @@ build/
 # IDEs
 .vscode/
 .idea/
+
+# Vendor (GLAD and such)
+vendor/
+
+# CMake shenanigans
+compile_commands.json
