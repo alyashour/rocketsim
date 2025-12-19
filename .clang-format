@@ -1,13 +1,10 @@
 BasedOnStyle: LLVM
-
+SortIncludes: false
 BreakBeforeBraces: Attach
 PointerAlignment: Left
-
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
-
 SpaceBeforeParens: ControlStatements 
 ColumnLimit: 120
-
 Language: C

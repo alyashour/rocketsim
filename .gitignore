@@ -1,15 +1,14 @@
-# Build
-build/
-
-# Caches (clang and others)
-**/.cache/
-
 # IDEs
 .vscode/
 .idea/
 
-# Vendor (GLAD and such)
-vendor/
+# MacOS
+**/.DS_Store
 
-# CMake shenanigans
+# Build, Cache, & CMake
+build/
+**/.cache/
 compile_commands.json
+
+# External
+vendor/

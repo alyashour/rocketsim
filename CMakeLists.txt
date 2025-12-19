@@ -1,15 +1,20 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 4.2)
 project(RocketSim C)
 
-# Variables
+# C STD
 set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF) 
+
+# Compile Commands
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_FLAGS_DEBUG "-g -O0 -Wall -Wextra -Wpedantic -Wshadow")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# GLAD
 set(GLAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad")
 set(GLAD_SOURCE "${GLAD_DIR}/src/glad.c")
 set(GLAD_INCLUDE "${GLAD_DIR}/include")
-
-# GLAD
 # - warning check
 if(NOT EXISTS "${GLAD_SOURCE}")
     message(FATAL_ERROR
@@ -46,6 +51,9 @@ add_executable(simulator
 # - Visualizer
 add_executable(visualizer
     src/visualizer/main.c
+    src/visualizer/objects/sim_object.c
+    src/visualizer/objects/triangle.c
+    src/visualizer/objects/cylinder.c
 )
 target_link_libraries(visualizer PRIVATE glfw glad)
 

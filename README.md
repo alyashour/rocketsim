@@ -26,8 +26,21 @@ See the `docs/` directory for more documentation.
 
 ## Compiling
 
-Nothing yet...
+You'll need CMake, git, a C compiler, glfw installed, and glad include and src files.
+
+Clone the repository, then...  
+```shell
+mkdir build
+cd build
+cmake ..
+```
+
+You may get an error here that says you're missing glad files in a folder called `vendor`.  
+Simply make the folder and head over to https://glad.dav1d.de/ to generate the required documents.
+
+If you're missing glfw headers on Mac and Linux you can do `brew install glfw3` or `sudo dnf install glfw glfw-devel`.  
+In the very unlikely circumstance someone is looking to compile this code on Windows please open an issue.
 
 ## Running
 
-Launch the `rocketsim` binary to open everything. Otherwise launch the `simulator`, `controller` and `visualizer` binaries separately.
+Launch the `rocketsim` binary to open everything (only Linux support for now). Otherwise launch the `simulator`, `controller` and `visualizer` binaries separately.

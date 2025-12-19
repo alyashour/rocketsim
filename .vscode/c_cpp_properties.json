@@ -6,11 +6,35 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/vendor/glad/include"
             ],
-            "defines": [],
-            "compilerPath": "/usr/lib64/ccache/clang",
+            "defines": [
+                "true=true",
+                "false=false",
+                "bool=_Bool"
+            ],
+            "compilerPath": "/usr/bin/gcc",
             "cStandard": "c23",
             "cppStandard": "c++17",
-            "intelliSenseMode": "linux-clang-x64",
+            "intelliSenseMode": "macos-gcc-arm64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        },
+        {
+            "name": "MacOS",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "true=true",
+                "false=false",
+                "bool=_Bool"
+            ],
+            "macFrameworkPath": [
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks",
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/SubFrameworks"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c23",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "${default}",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
