@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
 #include <stdlib.h>
-
+#include <unistd.h>
+#include <string.h>
+#include <sys/mman.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "objects/sim_object.h"
 #include "objects/triangle.h"
 
 // settings
@@ -70,9 +73,26 @@ int main() {
 
     // create shader
     GLuint shaderProgram = createShader();
+
+    // create shared mem
+    printf("[VIS] Opening shm with simulation...\n");
+    int fd = shm_open("rocketsim", O_RDONLY | O_EXCL, 0666);
+    if (fd == -1) {
+        printf("[VIS] shm_open failed.\n");
+        return EXIT_FAILURE;
+    }
+    int32_t* ptr = mmap(0, sizeof(int32_t), PROT_READ, MAP_SHARED, fd, 0);
+    if (ptr == MAP_FAILED) {
+        printf("[VIS] mmap failed.\n");
+        fprintf(stderr, "error: %s\n", strerror(errno));
+        return EXIT_FAILURE;
+    }
     
     // render loop
     while (!glfwWindowShouldClose(window)) {
+        // print ptr
+        printf("[VIS] ptr shows: %d\n", *ptr);
+
         // input
         processInput(window);
 
@@ -84,13 +104,15 @@ int main() {
         // glfw: swap buffers & poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        sleep(1);
     }
 
     // cleanup
     destroyTriangle(triangle);
     glfwDestroyWindow(window);
     glfwTerminate();
-    
+
     return EXIT_SUCCESS;
 }
 

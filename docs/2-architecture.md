@@ -1,4 +1,5 @@
 # Architecture
+Dec. 9, 2025.
 
 The system has 3 parts. I've decided all of them will sit on separate processes for isolation and also to work on my systems programming.
 

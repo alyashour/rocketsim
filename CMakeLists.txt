@@ -51,9 +51,7 @@ add_executable(simulator
 # - Visualizer
 add_executable(visualizer
     src/visualizer/main.c
-    src/visualizer/objects/sim_object.c
     src/visualizer/objects/triangle.c
-    src/visualizer/objects/cylinder.c
 )
 target_link_libraries(visualizer PRIVATE glfw glad)
 
