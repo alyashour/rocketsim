@@ -5,6 +5,20 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <time.h>
+#include <math.h>
+
+#include "scene_frame.h"
+
+float dr = 0.01f, dg = 0.02f, db = 0.03f;
+float dx = 0.01f, dy = 0.01f;
+
+void sleepms(int time_ms) {
+    static struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = time_ms * 1e6L;
+    nanosleep(&ts, NULL);
+}
 
 int main() {
     printf("Hello, Simulator!\n");
@@ -16,26 +30,39 @@ int main() {
         return EXIT_FAILURE;
     }
     ftruncate(fd, sizeof(int32_t));
-    int32_t* ptr = mmap(0, sizeof(int32_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    SceneFrame* ptr = mmap(0, sizeof(SceneFrame), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (ptr == MAP_FAILED) {
         printf("[SIM] mmap failed.\n");
         fprintf(stderr, "error: %s\n", strerror(errno));
         return EXIT_FAILURE;
     }
+    // set defaults
+    ptr->x = 0;
+    ptr->y = 0;
+    ptr->z = 0;
+    ptr->r = 1.0f;
+    ptr->g = 0.4f;
+    ptr->b = 0.0f;
 
-    printf("[SIM] Setting ptr to 0\n");
-    *ptr = 0;
-    sleep(5); // wait 5 seconds
+    while (true) {
+       // update color
+       ptr->r += dr;
+       ptr->g += dg;
+       ptr->b += db;
 
-    printf("[SIM] Setting ptr to 1\n");
-    *ptr = 1;
-    sleep(5); // wait 5 seconds
+       if (fabs(ptr->r) > 1.0f) dr *= -1.f;
+       if (fabs(ptr->g) > 1.0f) dg *= -1.f;
+       if (fabs(ptr->b) > 1.0f) db *= -1.f;
 
-    printf("[SIM] Setting ptr to 2\n");
-    *ptr = 2;
-    sleep(5); // wait 5 seconds
+       // update position
+       ptr->x += dx;
+       ptr->y += dy;
 
-    printf("[SIM] Closing...\n");
+       if (fabs(ptr->x) > 0.5f) dx *= -1.f;
+       if (fabs(ptr->y) > 0.5f) dy *= -1.f;
+
+       sleepms(50);
+    }
 
     return 0;
 }

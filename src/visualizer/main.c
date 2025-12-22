@@ -8,7 +8,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "objects/triangle.h"
+#include "rsm.h"
+#include "scene_frame.h"
+#include "visualizer/objects/triangle.h"
 
 // settings
 static const unsigned int SCR_WIDTH = 800;
@@ -73,16 +75,26 @@ int main() {
 
     // create shader
     GLuint shaderProgram = createShader();
+    int triangleColorLocation = glGetUniformLocation(shaderProgram, "triangleColor");
+    if (triangleColorLocation == -1) {
+        fprintf(stderr, "Failed to get shader uniform location for \"triangleColor\"\n");
+        return EXIT_FAILURE;
+    }
+    int transformMatrixLocation = glGetUniformLocation(shaderProgram, "transform");
+    if (transformMatrixLocation == -1) {
+        fprintf(stderr, "Failed to get shader uniform location for \"transform\"\n");
+        return EXIT_FAILURE;
+    }
 
     // create shared mem
     printf("[VIS] Opening shm with simulation...\n");
     int fd = shm_open("rocketsim", O_RDONLY | O_EXCL, 0666);
     if (fd == -1) {
-        printf("[VIS] shm_open failed.\n");
+        fprintf(stderr, "[VIS] shm_open failed.\n");
         return EXIT_FAILURE;
     }
-    int32_t* ptr = mmap(0, sizeof(int32_t), PROT_READ, MAP_SHARED, fd, 0);
-    if (ptr == MAP_FAILED) {
+    SceneFrame* scene = mmap(0, sizeof(SceneFrame), PROT_READ, MAP_SHARED, fd, 0);
+    if (scene == MAP_FAILED) {
         printf("[VIS] mmap failed.\n");
         fprintf(stderr, "error: %s\n", strerror(errno));
         return EXIT_FAILURE;
@@ -90,22 +102,25 @@ int main() {
     
     // render loop
     while (!glfwWindowShouldClose(window)) {
-        // print ptr
-        printf("[VIS] ptr shows: %d\n", *ptr);
-
-        // input
+        // keyboard input
         processInput(window);
 
+        // create transformation matrix out of scene data
+        vec3 v = rsmV3(scene->x, scene->y, scene->z);
+        mat4 identity = rsmM4Identity();
+        mat4 transform = rsmTranslate(&identity, &v);
+
         // render
+        glClearColor(0.1f, 0.0, 0.4f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
         glUseProgram(shaderProgram);
+        glUniform4f(triangleColorLocation, scene->r, scene->g, scene->b, 1.0f); // set triangle color according to sim
+        glUniformMatrix4fv(transformMatrixLocation, 1, GL_FALSE, transform.data);
         drawTriangle(triangle);
 
         // glfw: swap buffers & poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
-
-        sleep(1);
     }
 
     // cleanup
@@ -151,8 +166,9 @@ GLuint createShader() {
     // create shaders
     const char* vertexShaderSource = "#version 330 core\n"
         "layout (location = 0) in vec3 aPos;\n"
+        "uniform mat4 transform;\n"
         "void main() {\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+        "   gl_Position = transform * vec4(aPos, 1.0);\n"
         "}\0";
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -166,9 +182,10 @@ GLuint createShader() {
         return 0;
     }
     const char* fragShaderSource = "#version 330 core\n"
+        "uniform vec4 triangleColor;\n"
         "out vec4 FragColor;\n"
         "void main() {\n"
-        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+        "   FragColor = triangleColor;\n"
         "}\0";
     unsigned int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragShader, 1, &fragShaderSource, NULL);

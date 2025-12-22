@@ -42,20 +42,45 @@ find_package(glfw3 REQUIRED)
 add_executable(controller
     src/controller/main.c
 )
+target_include_directories(controller
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src
+)
 
 # - Simulator
 add_executable(simulator
     src/simulator/main.c
+)
+target_include_directories(simulator
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src
 )
 
 # - Visualizer
 add_executable(visualizer
     src/visualizer/main.c
     src/visualizer/objects/triangle.c
+    src/rsm.c
 )
 target_link_libraries(visualizer PRIVATE glfw glad)
+target_include_directories(visualizer
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src
+)
 
 # RocketSim
 add_executable(rocketsim
     src/launcher/main.c
+)
+target_include_directories(rocketsim
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/include
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src
 )

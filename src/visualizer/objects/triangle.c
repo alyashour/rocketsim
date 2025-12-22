@@ -1,3 +1,5 @@
+// TODO: add EBO
+
 #include "triangle.h"
 #include <stdlib.h>
 
