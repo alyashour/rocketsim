@@ -1,8 +1,8 @@
 #include "rsm.h"
 
 /* MAT4 */
-mat4 rsmM4Identity() {
-    return (mat4){ .data = {
+Mat4 rsmM4Identity() {
+    return (Mat4){ .data = {
         1.f, 0.f, 0.f, 0.f,
         0.f, 1.f, 0.f, 0.f,
         0.f, 0.f, 1.f, 0.f,
@@ -10,10 +10,10 @@ mat4 rsmM4Identity() {
     }};
 }
 
-mat4 rsmTranslate(const mat4* const mat, const vec3* const vec) {
+Mat4 rsmTranslate(const Mat4* const mat, const vec3* const vec) {
     const float* const m = mat->data;
     const float* const v = vec->data;
-    return (mat4){ .data = {
+    return (Mat4){ .data = {
         m[0], m[1], m[2], m[3],
         m[4], m[5], m[6], m[7],
         m[8], m[9], m[10], m[11],
@@ -21,7 +21,7 @@ mat4 rsmTranslate(const mat4* const mat, const vec3* const vec) {
     }};
 }
 
-float rsmGetM4(const unsigned int col, const unsigned int row, const mat4* const mat) {
+float rsmGetM4(const unsigned int col, const unsigned int row, const Mat4* const mat) {
     return mat->data[4 * col + row];
 }
 

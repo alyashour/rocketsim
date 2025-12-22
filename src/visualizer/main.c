@@ -107,8 +107,8 @@ int main() {
 
         // create transformation matrix out of scene data
         vec3 v = rsmV3(scene->x, scene->y, scene->z);
-        mat4 identity = rsmM4Identity();
-        mat4 transform = rsmTranslate(&identity, &v);
+        Mat4 identity = rsmM4Identity();
+        Mat4 transform = rsmTranslate(&identity, &v);
 
         // render
         glClearColor(0.1f, 0.0, 0.4f, 1.0f);
@@ -166,7 +166,7 @@ GLuint createShader() {
     // create shaders
     const char* vertexShaderSource = "#version 330 core\n"
         "layout (location = 0) in vec3 aPos;\n"
-        "uniform mat4 transform;\n"
+        "uniform Mat4 transform;\n"
         "void main() {\n"
         "   gl_Position = transform * vec4(aPos, 1.0);\n"
         "}\0";

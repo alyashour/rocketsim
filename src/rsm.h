@@ -9,16 +9,16 @@
 
 typedef struct {
     float data[16];
-} mat4;
+} Mat4;
 
 typedef struct {
     float data[3];
 } vec3;
 
 /* MAT4 */
-mat4 rsmM4Identity();
-mat4 rsmTranslate(const mat4* const mat, const vec3* const vec);
-float rsmM4Get(const unsigned int i, const unsigned int j, const mat4* const mat);
+Mat4 rsmM4Identity();
+Mat4 rsmTranslate(const Mat4* const mat, const vec3* const vec);
+float rsmM4Get(const unsigned int i, const unsigned int j, const Mat4* const mat);
 
 /* VEC3 */
 vec3 rsmV3(const float x, const float y, const float z);

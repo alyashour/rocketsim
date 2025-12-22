@@ -95,3 +95,14 @@ typedef struct SceneFrame {
      */
 }
 ```
+
+## Maths
+
+Because I'm a masochist (aka downright thug) we're writing the maths from scratch. I've creatively named it RocketSim math (RSM).
+
+Some juggling with transformation matrices later and ...
+
+## Complete!
+We're done 😏
+
+<video controls src="../media/3-motion-ipc.mov" title="Motion through IPC"></video>

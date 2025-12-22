@@ -13,8 +13,9 @@ Project name is RocketSim so prefix with RS.
 
 ## Naming
 
-Variables: camelCase
-Functions: PascalCase
+Variables: camelCase  
+Functions: cascalCase  
+Structs: PascalCase  
 
 ## Organization
 Put .c and .h files in the same directory.
