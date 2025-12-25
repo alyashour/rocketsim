@@ -6,7 +6,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-static const float vertices[] = {
+static const float TRIANGLE_VERTICES[] = {
    -0.5f, -0.5f, 0.0f,
     0.5f, -0.5f, 0.0f, 
     0.0f, 0.5f, 0.0f 
@@ -29,7 +29,7 @@ TriangleObj* createTriangle() {
     // create triangle vbo
     glGenBuffers(1, &t->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, t->vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(TRIANGLE_VERTICES), TRIANGLE_VERTICES, GL_STATIC_DRAW);
 
     // attrib pointers
     glVertexAttribPointer(
@@ -52,7 +52,8 @@ void drawTriangle(const TriangleObj* const t) {
 }
 
 /**
- * @brief Assumes relevant context is current
+ * @brief Destroys all data that the triangle owns on the GPU
+ * @invariant relevant context is current
  * @param t 
  */
 void destroyTriangle(TriangleObj* const t) {

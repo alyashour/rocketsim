@@ -62,9 +62,11 @@ target_include_directories(simulator
 
 # - Visualizer
 add_executable(visualizer
+    src/rsm.c  
     src/visualizer/main.c
+    src/visualizer/objects/shapes.c
+    src/visualizer/objects/vobject.c
     src/visualizer/objects/triangle.c
-    src/rsm.c
 )
 target_link_libraries(visualizer PRIVATE glfw glad)
 target_include_directories(visualizer

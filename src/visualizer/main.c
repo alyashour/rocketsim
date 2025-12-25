@@ -10,7 +10,8 @@
 
 #include "rsm.h"
 #include "scene_frame.h"
-#include "visualizer/objects/triangle.h"
+#include "visualizer/objects/shapes.h"
+#include "visualizer/objects/vobject.h"
 
 // settings
 static const unsigned int SCR_WIDTH = 800;
@@ -71,7 +72,7 @@ int main() {
     glfwSwapInterval(1);
 
     // create triangle
-    TriangleObj* triangle = createTriangle();
+    VObject triangle = createDefaultTriangle();
 
     // create shader
     GLuint shaderProgram = createShader();
@@ -116,7 +117,7 @@ int main() {
         glUseProgram(shaderProgram);
         glUniform4f(triangleColorLocation, scene->r, scene->g, scene->b, 1.0f); // set triangle color according to sim
         glUniformMatrix4fv(transformMatrixLocation, 1, GL_FALSE, transform.data);
-        drawTriangle(triangle);
+        drawVObject(&triangle);
 
         // glfw: swap buffers & poll events
         glfwSwapBuffers(window);
@@ -124,7 +125,7 @@ int main() {
     }
 
     // cleanup
-    destroyTriangle(triangle);
+    destroyVObject(&triangle);
     glfwDestroyWindow(window);
     glfwTerminate();
 
