@@ -1,6 +1,6 @@
 #include "vobject.h"
 
-#include <
+#include <glad/glad.h>
 
 VObject createVObject() {
     return (VObject) {
@@ -26,14 +26,14 @@ void drawVObject(const VObject* const o) {
  * @param o Object to be destroyed
  */
 void destroyVObject(VObject* const o) {
-    if (!t) return;
+    if (!o) return;
 
-    if (t->vbo)
-        glDeleteBuffers(1, &t->vbo);
+    if (o->vbo)
+        glDeleteBuffers(1, &o->vbo);
 
-    if (t->vao)
-        glDeleteVertexArrays(1, &t->vao);
+    if (o->vao)
+        glDeleteVertexArrays(1, &o->vao);
 
-    t->vbo = 0;
-    t->vao = 0;
+    o->vbo = 0;
+    o->vao = 0;
 }

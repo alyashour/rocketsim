@@ -13,6 +13,8 @@
 #include "visualizer/objects/shapes.h"
 #include "visualizer/objects/vobject.h"
 
+#define RS_SHM_PATH "/rocketsim" // TODO: refactor to a SINGLE file, probably scene_frame.h
+
 // settings
 static const unsigned int SCR_WIDTH = 800;
 static const unsigned int SCR_HEIGHT = 800;
@@ -89,7 +91,7 @@ int main() {
 
     // create shared mem
     printf("[VIS] Opening shm with simulation...\n");
-    int fd = shm_open("rocketsim", O_RDONLY | O_EXCL, 0666);
+    int fd = shm_open(RS_SHM_PATH, O_RDONLY | O_EXCL, 0644);
     if (fd == -1) {
         fprintf(stderr, "[VIS] shm_open failed.\n");
         return EXIT_FAILURE;
@@ -167,7 +169,7 @@ GLuint createShader() {
     // create shaders
     const char* vertexShaderSource = "#version 330 core\n"
         "layout (location = 0) in vec3 aPos;\n"
-        "uniform Mat4 transform;\n"
+        "uniform mat4 transform;\n"
         "void main() {\n"
         "   gl_Position = transform * vec4(aPos, 1.0);\n"
         "}\0";

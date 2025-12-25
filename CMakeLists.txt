@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 3.31) 
 project(RocketSim C)
 
 # C STD
@@ -59,6 +59,7 @@ target_include_directories(simulator
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/src
 )
+target_compile_definitions(simulator PRIVATE _POSIX_C_SOURCE=200809L)
 
 # - Visualizer
 add_executable(visualizer
@@ -66,7 +67,6 @@ add_executable(visualizer
     src/visualizer/main.c
     src/visualizer/objects/shapes.c
     src/visualizer/objects/vobject.c
-    src/visualizer/objects/triangle.c
 )
 target_link_libraries(visualizer PRIVATE glfw glad)
 target_include_directories(visualizer
@@ -86,3 +86,4 @@ target_include_directories(rocketsim
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/src
 )
+target_compile_definitions(rocketsim PRIVATE _POSIX_C_SOURCE=200809L)

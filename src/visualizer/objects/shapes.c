@@ -2,7 +2,6 @@
 #include "vobject.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 static const float TRIANGLE_VERTICES[] = {
    -0.5f, -0.5f, 0.0f,
@@ -18,7 +17,7 @@ VObject createDefaultTriangle() {
     );
 }
 
-VObject createTriangle(float vertices[static 9]) {
+VObject createTriangle(const float vertices[static 9]) {
     VObject v = createVObject();
 
     v.count = 3; // 3 points

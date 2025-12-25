@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -7,8 +8,11 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <stdint.h>
 
 #include "scene_frame.h"
+
+#define RS_SHM_PATH "/rocketsim"
 
 float dr = 0.01f, dg = 0.02f, db = 0.03f;
 float dx = 0.01f, dy = 0.01f;
@@ -24,16 +28,16 @@ int main() {
     printf("Hello, Simulator!\n");
 
     printf("[SIM] Opening shm with visualizer...\n");
-    int fd = shm_open("rocketsim", O_RDWR | O_CREAT, 0644, 0);
+    shm_unlink(RS_SHM_PATH); // unlink in case there's already one there
+    int fd = shm_open(RS_SHM_PATH, O_RDWR | O_CREAT, 0644);
     if (fd == -1) {
-        printf("[SIM] shm_open failed.\n");
+        fprintf(stderr, "[SIM] shm_open failed.\n%s\n", strerror(errno));
         return EXIT_FAILURE;
     }
     ftruncate(fd, sizeof(int32_t));
     SceneFrame* ptr = mmap(0, sizeof(SceneFrame), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (ptr == MAP_FAILED) {
-        printf("[SIM] mmap failed.\n");
-        fprintf(stderr, "error: %s\n", strerror(errno));
+        fprintf(stderr, "[SIM] mmap failed.\n%s\n", strerror(errno));
         return EXIT_FAILURE;
     }
     // set defaults

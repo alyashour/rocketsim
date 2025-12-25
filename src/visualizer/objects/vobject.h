@@ -5,13 +5,13 @@
 #ifndef RS_VOBJECT_H
 #define RS_VOBJECT_H
 
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 typedef struct {
     GLuint vao;
     GLuint vbo;
     GLuint ebo;
-    GLenum drawMode;
+    GLuint drawMode;
     GLsizei count; // num of primitives that make up object
 } VObject;
 

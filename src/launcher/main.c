@@ -12,6 +12,10 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#ifdef __linux__
+#include <linux/limits.h> // for PATH_MAX
+#endif
+
 #define NUM_CHILDREN 3
 
 /**
